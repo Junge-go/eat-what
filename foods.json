@@ -1,0 +1,25 @@
+{
+  "title": "今天吃什么？",
+  "items": [
+    { "name": "鲜烫吊龙米线", "address": "A座3层" },
+    { "name": "广式烧腊", "address": "A座3层" },
+    { "name": "牛肉罩饼", "address": "C座3层" },
+    { "name": "烤鸭", "address": "B座3层" },
+    { "name": "陈香贵牛肉拉面", "address": "D座4层" },
+    { "name": "西部马华", "address": "D座4层" },
+    { "name": "隆广顺剁椒猪脚饭", "address": "D座4层" },
+    { "name": "京城好客肉饼", "address": "D座4层" },
+    { "name": "蘸水菜", "address": "D座3层" },
+    { "name": "江西瓦罐汤", "address": "B座4层" },
+    { "name": "近家蒸好吃", "address": "A座5层" },
+    { "name": "滕州菜煎饼", "address": "A座5层" },
+    { "name": "小锅猪肚鸡", "address": "D座3层" },
+    { "name": "岐山臊子面", "address": "A座4层" },
+    { "name": "威县饼卷肉", "address": "A座5层" },
+    { "name": "熹笑延水饺", "address": "A座5层" },
+    { "name": "香煲小馆", "address": "D座3层" },
+    { "name": "biangbiang面", "address": "A座3层" },
+    { "name": "釜叔滑蛋饭", "address": "B座5层" },
+    { "name": "犟骨头", "address": "C座4层" }
+  ]
+}
