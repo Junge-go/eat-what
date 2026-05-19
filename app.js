@@ -37,16 +37,17 @@
   let spinning = false;
 
   async function loadConfig() {
+    const url = (typeof window !== 'undefined' && window.FOODS_URL) ? window.FOODS_URL : 'foods.json';
     try {
-      const res = await fetch('foods.json', { cache: 'no-cache' });
+      const res = await fetch(url, { cache: 'no-cache' });
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
       return normalize(data);
     } catch (err) {
-      console.warn('读取 foods.json 失败，使用默认配置：', err);
+      console.warn('读取 ' + url + ' 失败，使用默认配置：', err);
       // 如果是 file:// 协议，提示用户用本地服务器打开
       if (location.protocol === 'file:') {
-        showTip('提示：直接双击打开时浏览器会拦截 foods.json 读取，已使用默认菜单。建议用本地服务器（如 VSCode Live Server）打开。');
+        showTip('提示：直接双击打开时浏览器会拦截 JSON 读取，已使用默认菜单。建议用本地服务器（如 VSCode Live Server）打开。');
       }
       return normalize(FALLBACK);
     }

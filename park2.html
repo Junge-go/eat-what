@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>二号园区 - 今天吃什么</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 48px;
+    }
+    h1 {
+      margin: 8px 0 20px;
+      color: #5a2b00;
+      text-shadow: 0 2px 6px rgba(255,255,255,0.4);
+      font-size: 28px;
+    }
+    .wheel-wrap {
+      position: relative;
+      width: min(92vw, 460px);
+      height: min(92vw, 460px);
+    }
+    .pointer {
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 22px solid transparent;
+      border-right: 22px solid transparent;
+      border-top: 40px solid #e63946;
+      filter: drop-shadow(0 3px 4px rgba(0,0,0,0.25));
+      z-index: 3;
+    }
+    .pointer::after {
+      content: "";
+      position: absolute;
+      top: -48px;
+      left: -10px;
+      width: 20px;
+      height: 20px;
+      background: #e63946;
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+    }
+    canvas {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.18), 0 0 0 8px #fff, 0 0 0 12px #e63946;
+      transition: transform 5s cubic-bezier(0.17, 0.67, 0.21, 1);
+      background: #fff;
+    }
+    .spin-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: none;
+      background: radial-gradient(circle at 30% 30%, #ffd166, #e63946);
+      color: #fff;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      cursor: pointer;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.25), inset 0 -3px 6px rgba(0,0,0,0.2);
+      z-index: 2;
+      transition: transform 0.15s;
+    }
+    .spin-btn:active { transform: translate(-50%, -50%) scale(0.95); }
+    .spin-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .result {
+      margin-top: 28px;
+      min-height: 48px;
+      font-size: 22px;
+      font-weight: 600;
+      color: #5a2b00;
+      text-align: center;
+    }
+    .result .name {
+      display: inline-block;
+      padding: 8px 18px;
+      background: #fff;
+      border-radius: 999px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+      color: #e63946;
+    }
+    .result .addr {
+      margin-top: 10px;
+      font-size: 15px;
+      font-weight: 500;
+      color: #5a2b00;
+      opacity: 0.9;
+    }
+    .tip {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #7a4a1f;
+      opacity: 0.8;
+    }
+    .error {
+      margin-top: 20px;
+      color: #b00020;
+      background: #fff5f5;
+      padding: 10px 14px;
+      border-radius: 8px;
+      max-width: 90vw;
+    }
+    .nav {
+      width: 100%;
+      max-width: 460px;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .nav a {
+      display: inline-block;
+      padding: 6px 14px;
+      background: rgba(255,255,255,0.7);
+      color: #5a2b00;
+      text-decoration: none;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .nav a:hover { background: #fff; }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <a href="index.html">⬅ 返回首页</a>
+    <a href="park1.html">一号园区 ➡</a>
+  </div>
+  <h1 id="title">二号园区 - 今天吃什么？</h1>
+
+  <div class="wheel-wrap">
+    <div class="pointer"></div>
+    <canvas id="wheel" width="600" height="600"></canvas>
+    <button id="spin" class="spin-btn">GO</button>
+  </div>
+
+  <div class="result" id="result">点击中间按钮开始转动～</div>
+  <div class="tip">配置文件：foods2.json（修改后刷新页面即可生效）</div>
+
+  <script>window.FOODS_URL = 'foods2.json';</script>
+  <script src="app.js"></script>
+</body>
+</html>

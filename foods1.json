@@ -1,0 +1,24 @@
+{
+  "title": "一号园区今天吃什么？",
+  "items": [
+    { "name": "饭搭子", "address": "F座5层" },
+    { "name": "无名缘", "address": "B座4层" },
+    { "name": "爱面面", "address": "D座3层" },
+    { "name": "艾麦尔·青海拉面", "address": "B座3层" },
+    { "name": "杜嬢嬢翘脚牛肉", "address": "B座2层" },
+    { "name": "花甲粉", "address": "B座4层" },
+    { "name": "臻味热卤拌拌菜", "address": "B座2层" },
+    { "name": "顽皮老爷吃货铺", "address": "B座3层" },
+    { "name": "新疆炒米粉", "address": "D座3层" },
+    { "name": "武汉蔡二娘热干面", "address": "F座5层" },
+    { "name": "称重自助", "address": "B座2层" },
+    { "name": "川味鲜煮", "address": "D座4层" },
+    { "name": "川婆婆", "address": "D座3层" },
+    { "name": "椒香拌面", "address": "B座2层" },
+    { "name": "王三米皮", "address": "F座4层" },
+    { "name": "一碗好饭", "address": "D座3层" },
+    { "name": "石器时代", "address": "D座3层" },
+    { "name": "饭搭子", "address": "B座4层" },
+    { "name": "烧辣椒拌皮蛋", "address": "B座2层" }
+  ]
+}
