@@ -174,13 +174,133 @@
     return String(s).replace(/[&<>"']/g, m => map[m]);
   }
 
+  // ---- 菜单编辑功能 ----
+  const LS_KEY = 'eat-what-items-' + (window.FOODS_URL || 'foods.json');
+
+  function saveToStorage() {
+    try {
+      localStorage.setItem(LS_KEY, JSON.stringify(items));
+    } catch (e) { /* ignore */ }
+  }
+
+  function loadFromStorage() {
+    try {
+      const raw = localStorage.getItem(LS_KEY);
+      if (raw) {
+        const arr = JSON.parse(raw);
+        if (Array.isArray(arr) && arr.length >= 2) return arr;
+      }
+    } catch (e) { /* ignore */ }
+    return null;
+  }
+
+  function clearStorage() {
+    try { localStorage.removeItem(LS_KEY); } catch (e) { /* ignore */ }
+  }
+
+  function openEditor() {
+    if (spinning) return;
+    const overlay = document.createElement('div');
+    overlay.id = 'editor-overlay';
+    overlay.innerHTML = buildEditorHTML();
+    document.body.appendChild(overlay);
+    bindEditorEvents(overlay);
+  }
+
+  function buildEditorHTML() {
+    let rows = items.map((item, i) =>
+      `<div class="ed-row" data-idx="${i}">
+        <input class="ed-name" type="text" value="${escapeAttr(item.name)}" placeholder="名称" />
+        <input class="ed-addr" type="text" value="${escapeAttr(item.address)}" placeholder="地址（选填）" />
+        <button class="ed-del" title="删除">✕</button>
+      </div>`
+    ).join('');
+    return `
+      <div class="ed-backdrop"></div>
+      <div class="ed-panel">
+        <div class="ed-header">
+          <span>编辑菜单</span>
+          <button class="ed-close">✕</button>
+        </div>
+        <div class="ed-body" id="ed-body">${rows}</div>
+        <div class="ed-footer">
+          <button class="ed-add">+ 添加</button>
+          <button class="ed-reset">恢复默认</button>
+          <button class="ed-save">保存</button>
+        </div>
+      </div>`;
+  }
+
+  function escapeAttr(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function bindEditorEvents(overlay) {
+    overlay.querySelector('.ed-close').onclick = () => overlay.remove();
+    overlay.querySelector('.ed-backdrop').onclick = () => overlay.remove();
+    overlay.querySelector('.ed-add').onclick = () => {
+      const body = overlay.querySelector('#ed-body');
+      const div = document.createElement('div');
+      div.className = 'ed-row';
+      div.dataset.idx = body.children.length;
+      div.innerHTML = `
+        <input class="ed-name" type="text" value="" placeholder="名称" />
+        <input class="ed-addr" type="text" value="" placeholder="地址（选填）" />
+        <button class="ed-del" title="删除">✕</button>`;
+      body.appendChild(div);
+    };
+    overlay.querySelector('.ed-del,.ed-row .ed-del').onclick; // delegate below
+    overlay.querySelector('#ed-body').addEventListener('click', e => {
+      if (e.target.classList.contains('ed-del')) {
+        const body = overlay.querySelector('#ed-body');
+        if (body.children.length <= 2) { alert('至少保留 2 个选项'); return; }
+        e.target.closest('.ed-row').remove();
+      }
+    });
+    overlay.querySelector('.ed-reset').onclick = async () => {
+      if (!confirm('确定恢复为 JSON 文件中的默认菜单？本地修改将丢失。')) return;
+      clearStorage();
+      const cfg = await loadConfig();
+      items = cfg.items;
+      titleEl.textContent = cfg.title;
+      currentRotation = 0;
+      canvas.style.transform = 'rotate(0deg)';
+      drawWheel();
+      resultEl.innerHTML = '点击中间按钮开始转动～';
+      overlay.remove();
+    };
+    overlay.querySelector('.ed-save').onclick = () => {
+      const rows = overlay.querySelectorAll('.ed-row');
+      const newItems = [];
+      rows.forEach(row => {
+        const name = row.querySelector('.ed-name').value.trim();
+        const address = row.querySelector('.ed-addr').value.trim();
+        if (name) newItems.push({ name, address });
+      });
+      if (newItems.length < 2) { alert('至少需要 2 个有效选项'); return; }
+      items = newItems;
+      saveToStorage();
+      currentRotation = 0;
+      canvas.style.transform = 'rotate(0deg)';
+      drawWheel();
+      resultEl.innerHTML = '点击中间按钮开始转动～';
+      overlay.remove();
+    };
+  }
+
   async function init() {
     const cfg = await loadConfig();
-    items = cfg.items;
+    // 优先读取 localStorage 中的自定义数据
+    const stored = loadFromStorage();
+    items = stored || cfg.items;
     titleEl.textContent = cfg.title;
     document.title = cfg.title + ' - 大转盘';
     drawWheel();
     spinBtn.addEventListener('click', spin);
+
+    // 绑定编辑按钮
+    const editBtn = document.getElementById('edit-btn');
+    if (editBtn) editBtn.addEventListener('click', openEditor);
   }
 
   init();
